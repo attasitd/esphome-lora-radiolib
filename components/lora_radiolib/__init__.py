@@ -3,7 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import text_sensor
 from esphome.const import CONF_ID, CONF_FREQUENCY
 
-DEPENDENCIES = ['spi']
+DEPENDENCIES = ['spi', 'text_sensor']
 
 lora_ns = cg.esphome_ns.namespace('lora_radiolib')
 # อัปเกรดคลาสให้สืบทอดคุณสมบัติของ TextSensor
