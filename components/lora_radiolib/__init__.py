@@ -3,17 +3,18 @@ import esphome.config_validation as cv
 from esphome.components import text_sensor
 from esphome.const import CONF_ID, CONF_FREQUENCY
 
-DEPENDENCIES = ['spi', 'text_sensor']
+# บังคับว่าผู้ใช้ต้องตั้งค่า spi: ใน YAML
+DEPENDENCIES = ['spi']
+# แอบโหลด text_sensor มาเตรียมไว้เบื้องหลังอัตโนมัติ (ผู้ใช้ไม่ต้องพิมพ์เอง)
+AUTO_LOAD = ['text_sensor']
 
 lora_ns = cg.esphome_ns.namespace('lora_radiolib')
-# อัปเกรดคลาสให้สืบทอดคุณสมบัติของ TextSensor
 LoRaRadioLib = lora_ns.class_('LoRaRadioLib', text_sensor.TextSensor, cg.Component)
 
 CONF_CS_PIN = 'cs_pin'
 CONF_DIO0_PIN = 'dio0_pin'
 CONF_RST_PIN = 'rst_pin'
 
-# บังคับว่าผู้ใช้ต้องตั้งชื่อ (name) ให้เซนเซอร์ตัวนี้ใน YAML ด้วย
 CONFIG_SCHEMA = text_sensor.text_sensor_schema(LoRaRadioLib).extend({
     cv.Required(CONF_CS_PIN): cv.int_,
     cv.Required(CONF_DIO0_PIN): cv.int_,
@@ -25,7 +26,6 @@ async def to_code(config):
     cg.add_library("jgromes/RadioLib", "6.3.0")
     var = cg.new_Pvariable(config[CONF_ID])
     
-    # ลงทะเบียนเป็นทั้งคอมโพเนนต์และเซนเซอร์
     await cg.register_component(var, config)
     await text_sensor.register_text_sensor(var, config)
     
